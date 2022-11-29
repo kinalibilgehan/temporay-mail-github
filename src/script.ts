@@ -18,7 +18,9 @@ async function createTemplateData(wallet_address: string) {
         poolData["offset"] = poolInfo.coolPools[0].totalCO2Offset
         poolData["transactions"] = poolInfo.coolPools[0].totalTxCovered;
         poolData["greenToken"] = poolInfo.coolPools[0].greenToken;
-        mailContent[i]= poolData
+        // const dataString = JSON.stringify(poolData)
+        // mailContent[i]= JSON.parse(dataString)
+        mailContent[i] = poolData;
     }
     return mailContent;
 }
@@ -29,10 +31,13 @@ async function main() {
       const email = contacts[i].email;
       const wallet = contacts[i].address_line_1;
       const mailContent = await createTemplateData(wallet)
-      console.log(mailContent)
+      const mailString = JSON.stringify(mailContent)
+      const mailObj = JSON.parse(mailString)
+      const lastmailObj = {"mailContent": mailObj}
+      console.log(mailObj)
       
       
-      await sendEmailDynamic(email, {"mailContent":[{"offset":"2323004313","transactions":"4926","greenToken":"0xd066db51a6654fdf8df677226aa31e3c9a7a3535"},{"offset":"0","transactions":"0","greenToken":"0xf7c94d8417a67e8b897f1514fdc3b748427f7324"},{"offset":"0","transactions":"0","greenToken":"0x8378ed7349ded5013d4eb4299bc41bfc209533f9"},{"offset":"0","transactions":"0","greenToken":"0x839e7cf6c144d2ce9e84921d08eaf9997d9ae34d"},{"offset":"0","transactions":"0","greenToken":"0xf065b5df8f9ad04d11d1a40fcb0ca76a1144c43a"},{"offset":"0","transactions":"0","greenToken":"0x839e7cf6c144d2ce9e84921d08eaf9997d9ae34d"}]});
+      await sendEmailDynamic(email, lastmailObj);
       
     }
   }
